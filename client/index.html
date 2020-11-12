@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="./styles.css">
+    <script src="client.js"></script>
+    <title>TicTacToe</title>
+</head>
+
+<body>
+    <div id="enemy-screen" class="center hidden">
+        <h2>Play against:</h2>
+        <button type="button" id="choose-human" class="choose">Human</button>
+        <button type="button" id="choose-cpu" class="choose">CPU</button>
+    </div>
+
+    <div id="game-screen" class="center ">
+        <!-- Every cell has an id "cell" followed by cell row and cell column -->
+        <table class="center">
+            <tr>
+                <td>
+                    <button type="button" class="cell" id="cell00"></button>
+                </td>
+                <td>
+                    <button type="button" class="cell" id="cell01"></button>
+                </td>
+                <td>
+                    <button type="button" class="cell" id="cell02"></button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" class="cell" id="cell10"></button>
+                </td>
+                <td>
+                    <button type="button" class="cell" id="cell11"></button>
+                </td>
+                <td>
+                    <button type="button" class="cell" id="cell12"></button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" class="cell" id="cell20"></button>
+                </td>
+                <td>
+                    <button type="button" class="cell" id="cell21"></button>
+                </td>
+                <td>
+                    <button type="button" class="cell" id="cell22"></button>
+                </td>
+            </tr>
+        </table>
+        <button type="button" id="restart">Restart</button>
+        <div>
+</body>
+
+</html>
