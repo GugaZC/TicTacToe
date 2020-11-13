@@ -11,13 +11,21 @@
 </head>
 
 <body>
+
+    <div id="lobby-screen" class="center">
+        <ul id="players-online">
+        </ul>
+    </div>
+
+
+
     <div id="enemy-screen" class="center hidden">
         <h2>Play against:</h2>
         <button type="button" id="choose-human" class="choose">Human</button>
         <button type="button" id="choose-cpu" class="choose">CPU</button>
     </div>
 
-    <div id="game-screen" class="center ">
+    <div id="game-screen" class="center hidden">
         <!-- Every cell has an id "cell" followed by cell row and cell column -->
         <table class="center">
             <tr>

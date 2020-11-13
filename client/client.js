@@ -1,27 +1,67 @@
-var socket;
+let socket;
 
 function connectToServer(url) {
     socket = new WebSocket(url);
 
     socket.onopen = () => {
-        console.log("oi eu conectei");
+        const data = {
+            action: "getPlayers"
+        }
+        socket.send(JSON.stringify(data));
     }
 
-    socket.onmessage = function (event) {
-        const json = JSON.parse(event.data)
-        const message = json.data
+    socket.onmessage =  event => {
+        const dataRecived = JSON.parse(event.data)
+        switch (dataRecived.action) {
+            case "updateUsersStatus":
+                updateUsers(dataRecived.users)
+                break;
+            
+            case "selfChallenge":
+                alert("Você não pode se desafiar")
+                break;
 
-        const cell = document.getElementById(message.id);
+            case "playerNotAvailable":
+                alert("Esse player não está disponível")
+                break;
 
-        cell.innerHTML = `<p>${message.symbol}</p>`
+            case "acceptChallenge":
+                alert(`Você foi desafiado pelo ${dataRecived.player}`)
+                break;
+
+            default:
+                break;
+        }
+        // const message = json.data
+
+        // const cell = document.getElementById(message.id);
+
+        // cell.innerHTML = `${message.symbol}`
     }
 }
 
-function updateCell(id) {
+const updateUsers = (data) => {
+    const list = document.getElementById("players-online")
+    list.innerHTML = ''
+    data.available.forEach( element => {
+        list.insertAdjacentHTML("beforeend",`<li> <button type="button" id="${element.id}"  onclick="challenge(this.id)" class="player status-${element.status}">${element.name}</button> </li>`)
+    })
+}
+
+const challenge = (id) => {
+    const data = {
+        action: "challengePlayer",
+        challengedPlayerId:id, 
+    }
+    socket.send(JSON.stringify(data))
+}
+
+const updateCell = id => {
     const cell = document.getElementById(id);
 
     const data = {
         symbol: "x",
+        action: "updateCell",
         id
     }
 
@@ -39,7 +79,5 @@ document.addEventListener("DOMContentLoaded", event => {
             updateCell(element.id)
         })
     });
-
-
 
 });
