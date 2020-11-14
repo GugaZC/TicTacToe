@@ -1,119 +1,119 @@
 body {
-  /*padding: 15px;*/
-  padding-top: 1em;
-  font-family: sans-serif;
-  color: #333;
+    /*padding: 15px;*/
+    padding-top: 1em;
+    font-family: sans-serif;
+    color: #333;
 }
 
 #lobby-screen,
 #enemy-screen,
 #intro-screen {
-  max-width: 420px;
-  text-align: center; /* Centers h2 and buttons */
+    max-width: 420px;
+    text-align: center; /* Centers h2 and buttons */
 }
 
 #enemy-screen h2,
 #intro-screen h2 {
-  padding: 0 15px; /* Prevent text from touching the edges of the screen */
+    padding: 0 15px; /* Prevent text from touching the edges of the screen */
 }
 #intro-screen button {
-  font-size: 3.4em;
-  padding: 3% 6%; /* With "%" padding is based on container's width */
-  margin: 0 4%; /* Create distance between buttons */
+    font-size: 3.4em;
+    padding: 3% 6%; /* With "%" padding is based on container's width */
+    margin: 0 4%; /* Create distance between buttons */
 }
 #enemy-screen button {
-  display: block;
-  margin: 0.6em auto;
-  font-size: 1.9em;
-  padding: 0.2em 0.4em;
+    display: block;
+    margin: 0.6em auto;
+    font-size: 1.9em;
+    padding: 0.2em 0.4em;
 }
 
 #lobby-screen ul button {
-  display: block;
-  margin: 0.6em auto;
-  font-size: 1.9em;
-  padding: 0.2em 0.4em;
+    display: block;
+    margin: 0.6em auto;
+    font-size: 1.9em;
+    padding: 0.2em 0.4em;
 }
 
 li .player.status-available {
-  background-color: #34f012;
-  border-radius: 0;
+    background-color: #34f012;
+    border-radius: 0;
 }
 
-li .player.status-offline {
-  background-color: #f02112;
+li .player.status-inGame {
+    background-color: #f02112;
 }
 /****** GAME GRID ******/
 
 table {
-  max-width: 420px;
-  max-height: 420px;
-  width: 85vw; /* 85% of the viewport (body) width */
-  height: 85vw;
-  border-spacing: 4px 2px; /* Space between cells */
+    max-width: 420px;
+    max-height: 420px;
+    width: 85vw; /* 85% of the viewport (body) width */
+    height: 85vw;
+    border-spacing: 4px 2px; /* Space between cells */
 }
 td {
-  padding: 0;
-  width: 33%; /* Every cell should be 1/3 of table height (and width) */
-  height: 33%;
+    padding: 0;
+    width: 33%; /* Every cell should be 1/3 of table height (and width) */
+    height: 33%;
 }
 .cell {
-  font-size: 3.4em;
-  font-size: 6vmin; /* Responsive font size! Awesome! */
-  height: 100%; /* Fill the container (td) */
-  width: 100%;
+    font-size: 3.4em;
+    font-size: 6vmin; /* Responsive font size! Awesome! */
+    height: 100%; /* Fill the container (td) */
+    width: 100%;
 }
 .wincell {
-  background-color: #c88; /* Red background to highlight the "winning" line */
+    background-color: #c88; /* Red background to highlight the "winning" line */
 }
 .player-two {
-  color: #933;
+    color: #933;
 }
 
 /****** BUTTONS ******/
 
 button {
-  display: flex;
-  cursor: pointer;
-  border: 2px solid rgb(73, 73, 73);
-  color: #333;
-  border-radius: 10%;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    cursor: pointer;
+    border: 2px solid rgb(73, 73, 73);
+    color: #333;
+    border-radius: 10%;
+    justify-content: center;
+    align-items: center;
 }
 #restart {
-  font-size: 1.2em;
-  padding: 5px 10px;
-  /* Center horizontally */
-  margin: 20px auto;
-  display: block;
+    font-size: 1.2em;
+    padding: 5px 10px;
+    /* Center horizontally */
+    margin: 20px auto;
+    display: block;
 }
 
 .choose,
 #restart {
-  border-radius: 0.3em;
+    border-radius: 0.3em;
 }
 .choose:active,
 #restart:active {
-  background-color: #ccc; /* Darker color when the button is pressed */
+    background-color: #ccc; /* Darker color when the button is pressed */
 }
 
 .btn-green {
-  background-color: #70d260;
+    background-color: #70d260;
 }
 .btn-green:active {
-  /* Override the active background for #restart */
-  background-color: #60c050 !important;
+    /* Override the active background for #restart */
+    background-color: #60c050 !important;
 }
 
 /******  HELPER CLASSES  ******/
 
 .center {
-  margin: 0 auto;
+    margin: 0 auto;
 }
 .hidden {
-  display: none;
+    display: none;
 }
 .cannotuse {
-  cursor: not-allowed;
+    cursor: not-allowed;
 }
