@@ -37,7 +37,7 @@ const connectToServer = (url) => {
                 alert("Seu desafio foi recusado");
                 break;
             case "updateGame":
-                updateGame(dataRecived.cellId);
+                updateGame(dataRecived.cellId, dataRecived.isPlayer1sTurn);
                 break;
             default:
                 break;
@@ -65,8 +65,6 @@ const challenge = (id) => {
 };
 
 const updateCell = (cellId, boardId) => {
-    // const cell = document.getElementById(id);
-
     const data = {
         symbol: "x",
         action: "updateCell",
@@ -77,14 +75,17 @@ const updateCell = (cellId, boardId) => {
     socket.send(JSON.stringify(data));
 };
 
-const updateGame = (cellId) => {
+const updateGame = (cellId, player1Turn) => {
     const cells = document.getElementsByClassName("cell");
     const cell = Array.prototype.filter.call(
         cells,
         (cell) => cell.id === cellId
     )[0];
-
-    cell.innerHTML = "X";
+    if (player1Turn) {
+        cell.innerHTML = "X";
+    } else {
+        cell.innerHTML = "O";
+    }
 };
 
 const handleChallenge = (player1, player2) => {
@@ -101,6 +102,7 @@ const handleChallenge = (player1, player2) => {
             player2: `${player2.id}`,
         };
 
+        buttons.className = "center hidden";
         socket.send(JSON.stringify(data));
     });
 
@@ -109,9 +111,9 @@ const handleChallenge = (player1, player2) => {
             action: "refuseChallenge",
             player: player1.id,
         };
+        buttons.className = "center hidden";
         socket.send(JSON.stringify(data));
     });
-    buttons.className = "center hidden";
 };
 
 const enterGame = (id) => {

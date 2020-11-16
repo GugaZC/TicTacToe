@@ -96,6 +96,14 @@ const sendUsersConnected = () => {
         },
     };
 
+    // ws.on('played', function (data) {
+    //     var game;
+    //     for (var i = 0; i < games.length; i++) {
+    //         if (games[i].id == data.room) {
+    //             game = games[i];
+    //         }
+    //     }
+
     socketsConnected.forEach((socket) => {
         data.users.available.push(socket.Player);
     });
@@ -140,6 +148,7 @@ const createGame = (player1, player2) => {
         id: `${games.length + 1}`,
         player1Id: player1,
         player2Id: player2,
+        isPlayer1sTurn: true,
     };
     games.push(newGame);
 
@@ -180,8 +189,12 @@ const updateCell = (cellId, boardId) => {
     const data = {
         action: "updateGame",
         cellId,
+        isPlayer1sTurn: board.isPlayer1sTurn,
     };
 
+    games.filter(
+        (game) => game.id === boardId
+    )[0].isPlayer1sTurn = !board.isPlayer1sTurn;
     Player1.send(JSON.stringify(data));
     Player2.send(JSON.stringify(data));
 };
