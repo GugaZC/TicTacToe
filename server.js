@@ -96,13 +96,6 @@ const sendUsersConnected = () => {
         },
     };
 
-    // ws.on('played', function (data) {
-    //     var game;
-    //     for (var i = 0; i < games.length; i++) {
-    //         if (games[i].id == data.room) {
-    //             game = games[i];
-    //         }
-    //     }
 
     socketsConnected.forEach((socket) => {
         data.users.available.push(socket.Player);
@@ -187,6 +180,58 @@ const createGame = (player1, player2) => {
     Player1.send(JSON.stringify(data));
     Player2.send(JSON.stringify(data2));
 };
+
+// const getCol = (matrix, col) => {
+//     var column = [];
+//     for (var i = 0; i < matrix.length; i++) {
+//         column.push(matrix[i][col]);
+//     }
+//     return column;
+// };
+
+// const getMainDiagonal = (matrix) => {
+//     var diagonal = [];
+//     for (var i = 0; i < matrix.length; i++) {
+//         diagonal.push(matrix[i][i]);
+//     }
+//     return diagonal;
+// };
+
+// const getSecondDiagonal = (matrix) => {
+//     var diagonal = [];
+//     for (var i = 0; i < matrix.length; i++) {
+//         diagonal.push(matrix[i][matrix.length - i - 1]);
+//     }
+//     return diagonal;
+// };
+
+// const checkWin = (arr) =>{
+    
+//     var i;
+//     var j;
+//     for(i = 0; i < arr.length; i++){
+//         var row = arr[i];
+//         if(row[0] == row[1] && row[1] == row[2] && row[2] == row[0]){
+//             return true;
+//         }
+//     }
+//     var k = 0;
+//     for(i = 0; i < arr.length; i++){
+//         var column = getCol(arr, i);
+//         if (column[0] == column[1] && column[1] == column[2] && column[2] == column[0]) {
+//             return true;
+//         }
+//     }
+//     diagonal = getMainDiagonal(arr);
+//     if (diagonal[0] == diagonal[1] && diagonal[1] == diagonal[2] && diagonal[2] == diagonal[0]) {
+//         return true;
+//     }
+//     secondDiagonal = getSecondDiagonal(arr);
+//     if (secondDiagonal[0] == secondDiagonal[1] && secondDiagonal[1] == secondDiagonal[2] && secondDiagonal[2] == secondDiagonal[0]) {
+//         return true;
+//     }
+//     return false;
+// }
 
 const updateCell = (cellId, boardId) => {
     const board = games.filter((game) => game.id === boardId)[0];
