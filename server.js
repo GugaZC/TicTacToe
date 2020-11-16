@@ -88,7 +88,6 @@ wss.on("connection", (ws) => {
         socketsConnected.splice(index, 1);
     });
 });
-
 const sendUsersConnected = () => {
     let data = {
         action: "updateUsersStatus",
@@ -142,7 +141,6 @@ const createGame = (player1, player2) => {
         player1Id: player1,
         player2Id: player2,
     };
-
     games.push(newGame);
 
     const Player1 = socketsConnected.filter(

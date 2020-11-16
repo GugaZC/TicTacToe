@@ -88,9 +88,13 @@ const updateGame = (cellId) => {
 };
 
 const handleChallenge = (player1, player2) => {
-    const answer = confirm(`Você foi desafiado pelo ${player1.name}`);
+    const buttons = document.getElementById("challenge-popup");
 
-    if (answer == true) {
+    buttons.className = "center";
+    const acceptButton = document.getElementById("acceptButton");
+    const refuseButton = document.getElementById("refuseButton");
+
+    acceptButton.addEventListener("click", (event) => {
         const data = {
             action: "createGame",
             player1: `${player1.id}`,
@@ -98,13 +102,16 @@ const handleChallenge = (player1, player2) => {
         };
 
         socket.send(JSON.stringify(data));
-    } else {
+    });
+
+    refuseButton.addEventListener("click", (event) => {
         const data = {
             action: "refuseChallenge",
             player: player1.id,
         };
         socket.send(JSON.stringify(data));
-    }
+    });
+    buttons.className = "center hidden";
 };
 
 const enterGame = (id) => {
