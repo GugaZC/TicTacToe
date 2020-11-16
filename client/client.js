@@ -30,20 +30,41 @@ const connectToServer = (url) => {
                 break;
 
             case "enterGame":
-                enterGame(dataRecived.game.id);
+                enterGame(dataRecived.game.id, dataRecived.disable);
                 break;
 
             case "challengeRefused":
                 alert("Seu desafio foi recusado");
                 break;
             case "updateGame":
-                updateGame(dataRecived.cellId, dataRecived.isPlayer1sTurn);
+                updateGame(
+                    dataRecived.cellId,
+                    dataRecived.isPlayer1sTurn,
+                    dataRecived.isYourTurn
+                );
                 break;
             default:
                 break;
         }
     };
 };
+
+// var board = [
+//     ['0', '1', '2'],
+//     ['3', '4', '5'],
+//     ['6', '7', '8']
+// ];
+// var games = [];
+
+// function Game(id) {
+//     this.board = [
+//         ['0', '1', '2'],
+//         ['3', '4', '5'],
+//         ['6', '7', '8']
+//     ];
+//     this.players = [];
+//     this.id = id;
+// }
 
 const updateUsers = (data) => {
     const list = document.getElementById("players-online");
@@ -66,7 +87,6 @@ const challenge = (id) => {
 
 const updateCell = (cellId, boardId) => {
     const data = {
-        symbol: "x",
         action: "updateCell",
         cellId,
         boardId,
@@ -75,13 +95,17 @@ const updateCell = (cellId, boardId) => {
     socket.send(JSON.stringify(data));
 };
 
-const updateGame = (cellId, player1Turn) => {
+const updateGame = (cellId, player1Turn, isYourTurn) => {
     const cells = document.getElementsByClassName("cell");
     const cell = Array.prototype.filter.call(
         cells,
         (cell) => cell.id === cellId
     )[0];
-    if (player1Turn) {
+
+    if (isYourTurn) enableCells();
+    else disableCells();
+
+    if (!player1Turn) {
         cell.innerHTML = "X";
     } else {
         cell.innerHTML = "O";
@@ -116,7 +140,21 @@ const handleChallenge = (player1, player2) => {
     });
 };
 
-const enterGame = (id) => {
+const disableCells = () => {
+    const cells = document.getElementsByClassName("cell");
+    Array.prototype.forEach.call(cells, (element) => {
+        element.disabled = true;
+    });
+};
+
+const enableCells = () => {
+    const cells = document.getElementsByClassName("cell");
+    Array.prototype.forEach.call(cells, (element) => {
+        element.disabled = false;
+    });
+};
+
+const enterGame = (id, disable) => {
     const board = `<table id="${id}" class="center">
         <tr>
             <td>
@@ -162,6 +200,10 @@ const enterGame = (id) => {
     boardContainer.className = "center";
 
     boardContainer.innerHTML = board;
+
+    if (disable) {
+        disableCells();
+    }
 
     const cells = document.getElementsByClassName("cell");
 

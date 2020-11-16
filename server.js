@@ -149,6 +149,11 @@ const createGame = (player1, player2) => {
         player1Id: player1,
         player2Id: player2,
         isPlayer1sTurn: true,
+        game: [
+            ["", "", ""],
+            ["", "", ""],
+            ["", "", ""],
+        ],
     };
     games.push(newGame);
 
@@ -162,6 +167,14 @@ const createGame = (player1, player2) => {
 
     const data = {
         action: "enterGame",
+        disable: false,
+        game: {
+            id: newGame.id,
+        },
+    };
+    const data2 = {
+        action: "enterGame",
+        disable: true,
         game: {
             id: newGame.id,
         },
@@ -172,12 +185,22 @@ const createGame = (player1, player2) => {
     sendUsersConnected();
 
     Player1.send(JSON.stringify(data));
-    Player2.send(JSON.stringify(data));
+    Player2.send(JSON.stringify(data2));
 };
 
 const updateCell = (cellId, boardId) => {
     const board = games.filter((game) => game.id === boardId)[0];
 
+    let aux = [];
+    aux = cellId.split("");
+
+    if (board.isPlayer1sTurn) {
+        board.game[aux[4]][aux[5]] = "X";
+    } else {
+        board.game[aux[4]][aux[5]] = "O";
+    }
+
+    console.log(board.game);
     const Player1 = socketsConnected.filter(
         (socket) => socket.Player.id === board.player1Id
     )[0];
@@ -186,17 +209,31 @@ const updateCell = (cellId, boardId) => {
         (socket) => socket.Player.id === board.player2Id
     )[0];
 
+    games.filter(
+        (game) => game.id === boardId
+    )[0].isPlayer1sTurn = !board.isPlayer1sTurn;
+
     const data = {
         action: "updateGame",
         cellId,
         isPlayer1sTurn: board.isPlayer1sTurn,
+        isYourTurn: true,
     };
 
-    games.filter(
-        (game) => game.id === boardId
-    )[0].isPlayer1sTurn = !board.isPlayer1sTurn;
-    Player1.send(JSON.stringify(data));
-    Player2.send(JSON.stringify(data));
+    const data2 = {
+        action: "updateGame",
+        cellId,
+        isPlayer1sTurn: board.isPlayer1sTurn,
+        isYourTurn: false,
+    };
+
+    if (board.isPlayer1sTurn) {
+        Player1.send(JSON.stringify(data));
+        Player2.send(JSON.stringify(data2));
+    } else {
+        Player1.send(JSON.stringify(data2));
+        Player2.send(JSON.stringify(data));
+    }
 };
 
 const periodic = () => {
