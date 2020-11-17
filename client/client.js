@@ -11,10 +11,10 @@ const connectToServer = (url) => {
     };
 
     socket.onmessage = (event) => {
-        const dataRecived = JSON.parse(event.data);
-        switch (dataRecived.action) {
+        const dataReceived = JSON.parse(event.data);
+        switch (dataReceived.action) {
             case "updateUsersStatus":
-                updateUsers(dataRecived.users);
+                updateUsers(dataReceived.users);
                 break;
 
             case "selfChallenge":
@@ -26,11 +26,11 @@ const connectToServer = (url) => {
                 break;
 
             case "acceptChallenge":
-                handleChallenge(dataRecived.player1, dataRecived.player2);
+                handleChallenge(dataReceived.player1, dataReceived.player2);
                 break;
 
             case "enterGame":
-                enterGame(dataRecived.game.id, dataRecived.disable);
+                enterGame(dataReceived.game.id, dataReceived.disable);
                 break;
 
             case "challengeRefused":
@@ -38,9 +38,20 @@ const connectToServer = (url) => {
                 break;
             case "updateGame":
                 updateGame(
-                    dataRecived.cellId,
-                    dataRecived.isPlayer1sTurn,
-                    dataRecived.isYourTurn
+                    dataReceived.cellId,
+                    dataReceived.isPlayer1sTurn,
+                    dataReceived.isYourTurn
+                );
+                break;
+            case "informWin":
+                informWinner(dataReceived.playerName);
+                break;
+            case "gaveOldWoman":
+                informOldWoman(
+                    dataReceived.player1Id,
+                    dataReceived.player2Id,
+                    dataReceived.isPlayer1,
+                    dataReceived.boardId
                 );
                 break;
             default:
@@ -49,22 +60,33 @@ const connectToServer = (url) => {
     };
 };
 
-// var board = [
-//     ['0', '1', '2'],
-//     ['3', '4', '5'],
-//     ['6', '7', '8']
-// ];
-// var games = [];
+const informOldWoman = (player1Id, player2Id, isPlayer1, boardId) => {
+    const popup = document.getElementById("result-popup");
 
-// function Game(id) {
-//     this.board = [
-//         ['0', '1', '2'],
-//         ['3', '4', '5'],
-//         ['6', '7', '8']
-//     ];
-//     this.players = [];
-//     this.id = id;
-// }
+    popup.innerHTML = ` <button type="button" id="goBack" class="choose">Voltar ao lobby</button>
+    <button type="button" id="resetGame" class="choose">Jogar novamente</button>`;
+    popup.className = "center";
+
+    const goBack = document.getElementById("goBack");
+    const resetGame = document.getElementById("resetGame");
+
+    goBack.addEventListener("click", (event) => {
+        popup.className = `${popup.className} hidden`;
+
+        document.getElementById("lobby-screen").classList.remove("hidden");
+
+        const board = document.getElementById(`${boardId}`);
+        board.className = `${board.className} hidden`;
+    });
+    resetGame.addEventListener("click", (event) => {
+        if (isPlayer1) {
+            challenge(player2Id);
+        } else {
+            challenge(player1Id);
+        }
+        popup.className = `${popup.className} hidden`;
+    });
+};
 
 const updateUsers = (data) => {
     const list = document.getElementById("players-online");
@@ -75,6 +97,9 @@ const updateUsers = (data) => {
             `<li> <button type="button" id="${element.id}"  onclick="challenge(this.id)" class="player status-${element.status}">${element.name}</button> </li>`
         );
     });
+};
+const informWinner = (playerName) => {
+    alert(`O jogador ${playerName} venceu a partida`);
 };
 
 const challenge = (id) => {
@@ -110,6 +135,12 @@ const updateGame = (cellId, player1Turn, isYourTurn) => {
     } else {
         cell.innerHTML = "O";
     }
+
+    Array.prototype.filter.call(cells, (cell) => {
+        if (cell.innerHTML !== "") {
+            cell.disabled = true;
+        }
+    })[0];
 };
 
 const handleChallenge = (player1, player2) => {
@@ -125,7 +156,6 @@ const handleChallenge = (player1, player2) => {
             player1: `${player1.id}`,
             player2: `${player2.id}`,
         };
-
         buttons.className = "center hidden";
         socket.send(JSON.stringify(data));
     });

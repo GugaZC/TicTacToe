@@ -96,7 +96,6 @@ const sendUsersConnected = () => {
         },
     };
 
-
     socketsConnected.forEach((socket) => {
         data.users.available.push(socket.Player);
     });
@@ -143,9 +142,9 @@ const createGame = (player1, player2) => {
         player2Id: player2,
         isPlayer1sTurn: true,
         game: [
-            ["", "", ""],
-            ["", "", ""],
-            ["", "", ""],
+            ["1", "2", "3"],
+            ["4", "5", "6"],
+            ["7", "8", "9"],
         ],
     };
     games.push(newGame);
@@ -181,61 +180,64 @@ const createGame = (player1, player2) => {
     Player2.send(JSON.stringify(data2));
 };
 
-// const getCol = (matrix, col) => {
-//     var column = [];
-//     for (var i = 0; i < matrix.length; i++) {
-//         column.push(matrix[i][col]);
-//     }
-//     return column;
-// };
+const getCol = (matrix, col) => {
+    var column = [];
+    for (var i = 0; i < matrix.length; i++) {
+        column.push(matrix[i][col]);
+    }
+    return column;
+};
 
-// const getMainDiagonal = (matrix) => {
-//     var diagonal = [];
-//     for (var i = 0; i < matrix.length; i++) {
-//         diagonal.push(matrix[i][i]);
-//     }
-//     return diagonal;
-// };
+const getMainDiagonal = (matrix) => {
+    var diagonal = [];
+    for (var i = 0; i < matrix.length; i++) {
+        diagonal.push(matrix[i][i]);
+    }
+    return diagonal;
+};
 
-// const getSecondDiagonal = (matrix) => {
-//     var diagonal = [];
-//     for (var i = 0; i < matrix.length; i++) {
-//         diagonal.push(matrix[i][matrix.length - i - 1]);
-//     }
-//     return diagonal;
-// };
+const getSecondDiagonal = (matrix) => {
+    var diagonal = [];
+    for (var i = 0; i < matrix.length; i++) {
+        diagonal.push(matrix[i][matrix.length - i - 1]);
+    }
+    return diagonal;
+};
 
-// const checkWin = (arr) =>{
-    
-//     var i;
-//     var j;
-//     for(i = 0; i < arr.length; i++){
-//         var row = arr[i];
-//         if(row[0] == row[1] && row[1] == row[2] && row[2] == row[0]){
-//             return true;
-//         }
-//     }
-//     var k = 0;
-//     for(i = 0; i < arr.length; i++){
-//         var column = getCol(arr, i);
-//         if (column[0] == column[1] && column[1] == column[2] && column[2] == column[0]) {
-//             return true;
-//         }
-//     }
-//     diagonal = getMainDiagonal(arr);
-//     if (diagonal[0] == diagonal[1] && diagonal[1] == diagonal[2] && diagonal[2] == diagonal[0]) {
-//         return true;
-//     }
-//     secondDiagonal = getSecondDiagonal(arr);
-//     if (secondDiagonal[0] == secondDiagonal[1] && secondDiagonal[1] == secondDiagonal[2] && secondDiagonal[2] == secondDiagonal[0]) {
-//         return true;
-//     }
-//     return false;
-// }
+const checkWin = (arr) => {
+    var i;
+    var j;
+
+    for (i = 0; i < arr.length; i++) {
+        var row = arr[i];
+        if (row[0] == row[1] && row[1] == row[2] && row[2] == row[0]) {
+            return true;
+        }
+    }
+    var k = 0;
+    for (i = 0; i < arr.length; i++) {
+        var column = getCol(arr, i);
+        if (column[0] == column[1] && column[1] == column[2]) {
+            return true;
+        }
+    }
+    diagonal = getMainDiagonal(arr);
+    if (diagonal[0] == diagonal[1] && diagonal[1] == diagonal[2]) {
+        return true;
+    }
+    secondDiagonal = getSecondDiagonal(arr);
+    if (
+        secondDiagonal[0] == secondDiagonal[1] &&
+        secondDiagonal[1] == secondDiagonal[2]
+    ) {
+        return true;
+    }
+    return false;
+};
 
 const updateCell = (cellId, boardId) => {
     const board = games.filter((game) => game.id === boardId)[0];
-
+    const turn = board.isPlayer1sTurn;
     let aux = [];
     aux = cellId.split("");
 
@@ -245,7 +247,6 @@ const updateCell = (cellId, boardId) => {
         board.game[aux[4]][aux[5]] = "O";
     }
 
-    console.log(board.game);
     const Player1 = socketsConnected.filter(
         (socket) => socket.Player.id === board.player1Id
     )[0];
@@ -279,6 +280,57 @@ const updateCell = (cellId, boardId) => {
         Player1.send(JSON.stringify(data2));
         Player2.send(JSON.stringify(data));
     }
+
+    setTimeout(() => {
+        if (checkWin(board.game)) {
+            if (turn) {
+                const data = {
+                    action: "informWin",
+                    playerName: `${Player1.Player.name}`,
+                };
+                Player1.send(JSON.stringify(data));
+                Player2.send(JSON.stringify(data));
+            } else {
+                const data = {
+                    action: "informWin",
+                    playerName: `${Player2.Player.name}`,
+                };
+                Player1.send(JSON.stringify(data));
+                Player2.send(JSON.stringify(data));
+            }
+
+            Player1.Player.status = "available";
+            Player2.Player.status = "available";
+        } else {
+            let counter = 0;
+            board.game.map((item) =>
+                item.map((element) =>
+                    element === "X" || element === "O" ? null : counter++
+                )
+            );
+            if (counter === 0) {
+                const data1 = {
+                    action: "gaveOldWoman",
+                    player1Id: Player1.Player.id,
+                    player2Id: Player2.Player.id,
+                    isPlayer1: true,
+                    boardId: board.id,
+                };
+                const data2 = {
+                    action: "gaveOldWoman",
+                    player1Id: Player1.Player.id,
+                    player2Id: Player2.Player.id,
+                    isPlayer1: false,
+                    boardId: board.id,
+                };
+                Player1.send(JSON.stringify(data1));
+                Player2.send(JSON.stringify(data2));
+                Player1.Player.status = "available";
+                Player2.Player.status = "available";
+                sendUsersConnected();
+            }
+        }
+    }, 200);
 };
 
 const periodic = () => {

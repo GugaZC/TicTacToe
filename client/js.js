@@ -1,9 +1,9 @@
 var playerSymbol;
 var enemySymbol;
-var win;  // TRUE if somebody won the game
+var win; // TRUE if somebody won the game
 var turn; // Number of the current turn
-var row, column;  // Will contain "coordinates"for a specific cell
-var cpuEnabled = true;  // Set this to false to play against a human
+var row, column; // Will contain "coordinates"for a specific cell
+var cpuEnabled = true; // Set this to false to play against a human
 
 $(document).ready(function () {
     // Intro screen buttons
@@ -35,36 +35,33 @@ $(document).ready(function () {
     $(".cell").on("click", function () {
         // If nobody has won yet and clicked cell is empty
         if (!win && this.innerHTML === "") {
-            if (turn % 2 === 0) { // Even number = player turn
+            if (turn % 2 === 0) {
+                // Even number = player turn
                 insertSymbol(this, playerSymbol);
-            }
-            else { // Odd number = enemy turn
+            } else {
+                // Odd number = enemy turn
                 insertSymbol(this, enemySymbol);
             }
         }
     });
 });
 
-
 /******  FUNCTIONS  ******/
-
 
 // Inserts a symbol in the clicked cell
 function insertSymbol(element, symbol) {
     element.innerHTML = symbol;
 
-    if (symbol === enemySymbol)
-        $("#" + element.id).addClass("player-two"); // Color enemy symbol differently
-    $("#" + element.id).addClass("cannotuse");  // Show a "disabled" cursor on already occupied cells
+    if (symbol === enemySymbol) $("#" + element.id).addClass("player-two"); // Color enemy symbol differently
+    $("#" + element.id).addClass("cannotuse"); // Show a "disabled" cursor on already occupied cells
 
     checkWinConditions(element);
     turn++;
     // Game end - If somebody has won or all cells are filled
     if (win || turn > 8) {
-        $("#restart").addClass("btn-green");  // Highlights "restart" button
-        $(".cell").addClass("cannotuse");  // Tells visually you can't interact anymore with the game grid
-    }
-    else if (cpuEnabled && turn % 2 !== 0) {
+        $("#restart").addClass("btn-green"); // Highlights "restart" button
+        $(".cell").addClass("cannotuse"); // Tells visually you can't interact anymore with the game grid
+    } else if (cpuEnabled && turn % 2 !== 0) {
         cpuTurn();
     }
 }
