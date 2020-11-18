@@ -93,9 +93,10 @@ wss.on("connection", (ws) => {
 });
 
 const setUsername = (username, playerId) => {
-    const challenged = (socketsConnected.filter(
+    socketsConnected.filter(
         (socket) => socket.Player.id === playerId
-    )[0].Player.name = username);
+    )[0].Player.name = username;
+
     sendUsersConnected();
 };
 

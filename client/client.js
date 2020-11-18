@@ -140,6 +140,7 @@ const informOldWoman = (player1Id, player2Id, isPlayer1, boardId) => {
         }
         popup.className = `${popup.className} hidden`;
     });
+    board.parentNode.removeChild(board);
 };
 
 const updateUsers = (data) => {
@@ -148,7 +149,7 @@ const updateUsers = (data) => {
     data.available.forEach((element) => {
         list.insertAdjacentHTML(
             "beforeend",
-            `<li> <button type="button" id="${element.id} "  onclick="challenge(this.id)" class="player status-${element.status} minWidth">${element.name}</button> </li>`
+            `<li> <button type="button" id="${element.id}"  onclick="challenge(this.id)" class="player status-${element.status} minWidth">${element.name}</button> </li>`
         );
     });
 };
