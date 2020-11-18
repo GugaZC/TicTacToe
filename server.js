@@ -18,6 +18,7 @@ wss.on("connection", (ws) => {
 
     ws.Player = Player;
     socketsConnected.push(ws);
+    ws.send(JSON.stringify({ action: "getName", playerId: Player.id }));
 
     ws.on("message", (data) => {
         // data = {
@@ -37,6 +38,8 @@ wss.on("connection", (ws) => {
             player,
             cellId,
             boardId,
+            username,
+            playerId,
         } = JSON.parse(data);
 
         const senderId = ws.Player.id;
@@ -51,7 +54,7 @@ wss.on("connection", (ws) => {
                 break;
 
             case "setUsername":
-                console.log("setUsername");
+                setUsername(username, playerId);
                 break;
 
             case "challengePlayer":
@@ -88,6 +91,14 @@ wss.on("connection", (ws) => {
         socketsConnected.splice(index, 1);
     });
 });
+
+const setUsername = (username, playerId) => {
+    const challenged = (socketsConnected.filter(
+        (socket) => socket.Player.id === playerId
+    )[0].Player.name = username);
+    sendUsersConnected();
+};
+
 const sendUsersConnected = () => {
     let data = {
         action: "updateUsersStatus",
@@ -287,20 +298,45 @@ const updateCell = (cellId, boardId) => {
                 const data = {
                     action: "informWin",
                     playerName: `${Player1.Player.name}`,
+                    player1Id: Player1.Player.id,
+                    player2Id: Player2.Player.id,
+                    isPlayer1: false,
+                    boardId: board.id,
                 };
-                Player1.send(JSON.stringify(data));
+                const data2 = {
+                    action: "informWin",
+                    playerName: `${Player1.Player.name}`,
+                    player1Id: Player1.Player.id,
+                    player2Id: Player2.Player.id,
+                    isPlayer1: true,
+                    boardId: board.id,
+                };
+                Player1.send(JSON.stringify(data2));
                 Player2.send(JSON.stringify(data));
             } else {
+                const data2 = {
+                    action: "informWin",
+                    playerName: `${Player2.Player.name}`,
+                    player1Id: Player1.Player.id,
+                    player2Id: Player2.Player.id,
+                    isPlayer1: false,
+                    boardId: board.id,
+                };
                 const data = {
                     action: "informWin",
                     playerName: `${Player2.Player.name}`,
+                    player1Id: Player1.Player.id,
+                    player2Id: Player2.Player.id,
+                    isPlayer1: true,
+                    boardId: board.id,
                 };
                 Player1.send(JSON.stringify(data));
-                Player2.send(JSON.stringify(data));
+                Player2.send(JSON.stringify(data2));
             }
 
             Player1.Player.status = "available";
             Player2.Player.status = "available";
+            sendUsersConnected();
         } else {
             let counter = 0;
             board.game.map((item) =>

@@ -43,8 +43,18 @@ const connectToServer = (url) => {
                     dataReceived.isYourTurn
                 );
                 break;
+
+            case "getName":
+                setUserName(dataReceived.playerId);
+                break;
             case "informWin":
-                informWinner(dataReceived.playerName);
+                informWinner(
+                    dataReceived.player1Id,
+                    dataReceived.player2Id,
+                    dataReceived.isPlayer1,
+                    dataReceived.boardId,
+                    dataReceived.playerName
+                );
                 break;
             case "gaveOldWoman":
                 informOldWoman(
@@ -60,7 +70,51 @@ const connectToServer = (url) => {
     };
 };
 
+const setUserName = (playerId) => {
+    const getUsername = document.getElementById("get-username");
+    input = document.createElement("input");
+    input.type = "text";
+    getUsername.innerHTML = input;
+    button = document.createElement("button");
+
+    getUsername.innerHTML = username = input.value;
+
+    input.type = "text";
+    getUsername.appendChild(input);
+    button = document.createElement("button");
+    getUsername.appendChild(button);
+    button.innerHTML = "Salvar";
+
+    button.addEventListener("click", (event) => {
+        username = input.value;
+        if (username) sendUsername(username, playerId);
+        else alert("Digite um nome");
+        getUsername.className = `${getUsername.className} hidden`;
+    });
+
+    input.addEventListener("keyup", (event) => {
+        if (event.keyCode == 13) {
+            username = input.value;
+            if (username) sendUsername(username, playerId);
+            else alert("Digite um nome");
+            getUsername.className = `${getUsername.className} hidden`;
+        }
+    });
+};
+
+const sendUsername = (username, playerId) => {
+    data = {
+        action: "setUsername",
+        username,
+        playerId: playerId,
+    };
+    socket.send(JSON.stringify(data));
+    document.getElementById("lobby-screen").classList.remove("hidden");
+};
+
 const informOldWoman = (player1Id, player2Id, isPlayer1, boardId) => {
+    disableCells();
+    alert("GaveOldWoman (pt_br: deu velha)");
     const popup = document.getElementById("result-popup");
 
     popup.innerHTML = ` <button type="button" id="goBack" class="choose">Voltar ao lobby</button>
@@ -94,12 +148,42 @@ const updateUsers = (data) => {
     data.available.forEach((element) => {
         list.insertAdjacentHTML(
             "beforeend",
-            `<li> <button type="button" id="${element.id}"  onclick="challenge(this.id)" class="player status-${element.status}">${element.name}</button> </li>`
+            `<li> <button type="button" id="${element.id} "  onclick="challenge(this.id)" class="player status-${element.status} minWidth">${element.name}</button> </li>`
         );
     });
 };
-const informWinner = (playerName) => {
+const informWinner = (player1Id, player2Id, isPlayer1, boardId, playerName) => {
+    disableCells();
     alert(`O jogador ${playerName} venceu a partida`);
+    const popup = document.getElementById("result-popup");
+
+    popup.innerHTML = ` <button type="button" id="goBack" class="choose">Voltar ao lobby</button>
+    <button type="button" id="resetGame" class="choose">Jogar novamente</button>`;
+    popup.className = "center";
+
+    const goBack = document.getElementById("goBack");
+    const resetGame = document.getElementById("resetGame");
+
+    const board = document.getElementById(`${boardId}`);
+    goBack.addEventListener("click", (event) => {
+        popup.className = `${popup.className} hidden`;
+
+        document.getElementById("lobby-screen").classList.remove("hidden");
+
+        board.className = `${board.className} hidden`;
+    });
+    resetGame.addEventListener("click", (event) => {
+        if (isPlayer1) {
+            challenge(player2Id);
+        } else {
+            challenge(player1Id);
+        }
+        popup.className = `${popup.className} hidden`;
+    });
+    const startMessage = document.getElementById("playerTurn");
+    startMessage.innerHTML = "";
+
+    board.parentNode.removeChild(board);
 };
 
 const challenge = (id) => {
@@ -127,8 +211,14 @@ const updateGame = (cellId, player1Turn, isYourTurn) => {
         (cell) => cell.id === cellId
     )[0];
 
-    if (isYourTurn) enableCells();
-    else disableCells();
+    const startMessage = document.getElementById("playerTurn");
+    if (isYourTurn) {
+        startMessage.innerHTML = "É a sua vez";
+        enableCells();
+    } else {
+        startMessage.innerHTML = "Aguardando o outro jogador ✋🏻✋🏻✋🏻";
+        disableCells();
+    }
 
     if (!player1Turn) {
         cell.innerHTML = "X";
@@ -229,10 +319,15 @@ const enterGame = (id, disable) => {
 
     boardContainer.className = "center";
 
-    boardContainer.innerHTML = board;
+    boardContainer.innerHTML = boardContainer.innerHTML + board;
+
+    const startMessage = document.getElementById("playerTurn");
 
     if (disable) {
         disableCells();
+        startMessage.innerHTML = "Aguardando o outro jogador ✋🏻✋🏻✋🏻";
+    } else {
+        startMessage.innerHTML = "É a sua vez";
     }
 
     const cells = document.getElementsByClassName("cell");

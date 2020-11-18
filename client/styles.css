@@ -70,6 +70,9 @@ td {
     color: #933;
 }
 
+.minWidth {
+    min-width: 300px;
+}
 /****** BUTTONS ******/
 
 button {
