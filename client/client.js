@@ -1,5 +1,5 @@
 let socket;
-
+let counter = 0;
 const connectToServer = (url) => {
     socket = new WebSocket(url);
 
@@ -35,6 +35,7 @@ const connectToServer = (url) => {
 
             case "challengeRefused":
                 alert("Seu desafio foi recusado");
+                document.getElementById("lobby-screen").classList.remove("hi");
                 break;
             case "updateGame":
                 updateGame(
@@ -72,24 +73,35 @@ const connectToServer = (url) => {
 
 const setUserName = (playerId) => {
     const getUsername = document.getElementById("get-username");
-    input = document.createElement("input");
-    input.type = "text";
-    getUsername.innerHTML = input;
-    button = document.createElement("button");
 
-    getUsername.innerHTML = username = input.value;
+    content = `<div class="row justify-content-md-center"> 
+                    <div class="col-6 ">  
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="nameInput" placeholder="Digite seu nickname" aria-label="Recipient's username" aria-describedby="button-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" id="nameButton">Salvar</button>
+                            </div>
+                        </div>
+                    </div> 
+              </div>`;
 
-    input.type = "text";
-    getUsername.appendChild(input);
-    button = document.createElement("button");
-    getUsername.appendChild(button);
-    button.innerHTML = "Salvar";
+    getUsername.innerHTML = content;
+    button = document.getElementById("nameButton");
+    // username = input.value;
+    input = document.getElementById("nameInput");
+    // getUsername.innerHTML = username;
+
+    // input.type = "text";
+    // getUsername.innerHTML = button;
+
+    // button.innerHTML = "Salvar";
 
     button.addEventListener("click", (event) => {
         username = input.value;
-        if (username) sendUsername(username, playerId);
-        else alert("Digite um nome");
-        getUsername.className = `${getUsername.className} hidden`;
+        if (username) {
+            sendUsername(username, playerId);
+            getUsername.className = `${getUsername.className} hidden`;
+        } else alert("Digite um nome");
     });
 
     input.addEventListener("keyup", (event) => {
@@ -131,6 +143,7 @@ const informOldWoman = (player1Id, player2Id, isPlayer1, boardId) => {
 
         const board = document.getElementById(`${boardId}`);
         board.className = `${board.className} hidden`;
+        console.log("oi");
     });
     resetGame.addEventListener("click", (event) => {
         if (isPlayer1) {
@@ -149,7 +162,7 @@ const updateUsers = (data) => {
     data.available.forEach((element) => {
         list.insertAdjacentHTML(
             "beforeend",
-            `<li> <button type="button" id="${element.id}"  onclick="challenge(this.id)" class="player status-${element.status} minWidth">${element.name}</button> </li>`
+            `<li> <button type="button" id="${element.id}"  onclick="challenge(this.id)" class="list-group-item player status-${element.status} minWidth">${element.name}</button> </li>`
         );
     });
 };
@@ -170,8 +183,7 @@ const informWinner = (player1Id, player2Id, isPlayer1, boardId, playerName) => {
         popup.className = `${popup.className} hidden`;
 
         document.getElementById("lobby-screen").classList.remove("hidden");
-
-        board.className = `${board.className} hidden`;
+        console.log("oi");
     });
     resetGame.addEventListener("click", (event) => {
         if (isPlayer1) {
@@ -241,24 +253,29 @@ const handleChallenge = (player1, player2) => {
     const acceptButton = document.getElementById("acceptButton");
     const refuseButton = document.getElementById("refuseButton");
 
-    acceptButton.addEventListener("click", (event) => {
-        const data = {
-            action: "createGame",
-            player1: `${player1.id}`,
-            player2: `${player2.id}`,
-        };
-        buttons.className = "center hidden";
-        socket.send(JSON.stringify(data));
-    });
+    if (counter === 0) {
+        acceptButton.addEventListener("click", (event) => {
+            const data = {
+                action: "createGame",
+                player1: `${player1.id}`,
+                player2: `${player2.id}`,
+            };
+            buttons.className = "center hidden";
+            document.getElementById("challenge-popup").classList.add("hidden");
+            socket.send(JSON.stringify(data));
+        });
 
-    refuseButton.addEventListener("click", (event) => {
-        const data = {
-            action: "refuseChallenge",
-            player: player1.id,
-        };
-        buttons.className = "center hidden";
-        socket.send(JSON.stringify(data));
-    });
+        refuseButton.addEventListener("click", (event) => {
+            const data = {
+                action: "refuseChallenge",
+                player: player1.id,
+            };
+            buttons.className = "center hidden";
+            socket.send(JSON.stringify(data));
+            refuseButton.removeEventListener("click", () => {});
+        });
+    }
+    counter++;
 };
 
 const disableCells = () => {
