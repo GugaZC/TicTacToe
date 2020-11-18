@@ -28,14 +28,29 @@
         </div>
         
         <div id="challenge-popup" class="hidden">
-            <div class="row text-center">
-               
-                <div class="col text-center">
-                    <button class="btn btn-outline-primary" type="button" id="acceptButton" >Aceitar</button>
-                    <button class="btn btn-outline-secondary" type="button" id="refuseButton" >Recusar</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                Launch demo modal
+              </button>
+              
+              <!-- Modal -->
+              <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle">Você está sendo desafiado!!!</h5>
+                
+                    </div>
+                    <div class="modal-body">
+                        <div class="row text-center">
+                            <div class="col text-center">
+                                <button class="btn btn-outline-primary" type="button" id="acceptButton"  data-dismiss="modal">Aceitar</button>
+                                <button class="btn btn-outline-secondary" type="button" id="refuseButton"  data-dismiss="modal">Recusar</button>
+                            </div>                
+                        </div>
+                    </div>
+                  </div>
                 </div>
-                   
-            </div>
+              </div>
         </div>
         
         <div id="result-popup" class="center hidden">

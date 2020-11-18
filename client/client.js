@@ -165,7 +165,9 @@ const updateUsers = (data) => {
             "beforeend",
             `<div class="row align-items-center"> 
                 <div class="col"> 
-                    <span  id="${element.id}" style="cursor: pointer; justify-content: space-between;"  onclick="challenge(this.id)" class="d-flex list-group-item align-items-center minWidth">
+                    <span  id="${element.id}" style="cursor: pointer; justify-content: space-between;" 
+                    onclick="challenge(this.id)"
+                    class="d-flex list-group-item align-items-center minWidth">
                     
                     ${element.name}
                     
@@ -267,6 +269,8 @@ const updateGame = (cellId, player1Turn, isYourTurn) => {
 
 const handleChallenge = (player1, player2) => {
     const buttons = document.getElementById("challenge-popup");
+
+    document.getElementById("#exampleModalCenter").modal("show");
 
     buttons.className = "center";
     const acceptButton = document.getElementById("acceptButton");
