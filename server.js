@@ -12,7 +12,7 @@ wss.on("connection", (ws) => {
     const Player = {
         id: `${Math.round(Math.random() * 10000)}`,
         name: `Player${socketsConnected.length + 1}`,
-        status: "available",
+        status: "notLogged",
         // connectedAt: Date.now()
     };
 
@@ -96,6 +96,9 @@ const setUsername = (username, playerId) => {
     socketsConnected.filter(
         (socket) => socket.Player.id === playerId
     )[0].Player.name = username;
+    socketsConnected.filter(
+        (socket) => socket.Player.id === playerId
+    )[0].Player.status = "available";
 
     sendUsersConnected();
 };
