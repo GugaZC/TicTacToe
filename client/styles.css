@@ -1,5 +1,4 @@
 body {
-    /*padding: 15px;*/
     padding-top: 1em;
     font-family: sans-serif;
     color: #333;
@@ -28,19 +27,18 @@ body {
     padding: 0.2em 0.4em;
 }
 
-#lobby-screen ul button {
+/* #lobby-screen ul button {
     display: block;
     margin: 0.6em auto;
     font-size: 1.9em;
     padding: 0.2em 0.4em;
-}
+} */
 
-li .player.status-available {
+span .player.status-available {
     background-color: #34f012;
-    border-radius: 0;
 }
 
-li .player.status-inGame {
+span.player.status-inGame {
     background-color: #f02112;
 }
 /****** GAME GRID ******/
@@ -84,6 +82,7 @@ button {
     justify-content: center;
     align-items: center;
 }
+
 #restart {
     font-size: 1.2em;
     padding: 5px 10px;

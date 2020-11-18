@@ -159,10 +159,29 @@ const informOldWoman = (player1Id, player2Id, isPlayer1, boardId) => {
 const updateUsers = (data) => {
     const list = document.getElementById("players-online");
     list.innerHTML = "";
+
     data.available.forEach((element) => {
         list.insertAdjacentHTML(
             "beforeend",
-            `<li> <button type="button" id="${element.id}"  onclick="challenge(this.id)" class="list-group-item player status-${element.status} minWidth">${element.name}</button> </li>`
+            `<div class="row align-items-center"> 
+                <div class="col"> 
+                    <span  id="${element.id}" style="cursor: pointer; justify-content: space-between;"  onclick="challenge(this.id)" class="d-flex list-group-item align-items-center minWidth">
+                    
+                    ${element.name}
+                    
+                    <span class="dot player status-${element.status}" style="
+                        height: 10px;
+                        width: 10px;
+                        border-radius: 50%;
+                        display: inline-block;
+                    ">
+                    </span> 
+                    
+                    </span>
+                </div>
+               
+            </div>
+             `
         );
     });
 };

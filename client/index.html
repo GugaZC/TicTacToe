@@ -15,27 +15,38 @@
 </head>
 
 <body>
-    <div id='get-username' > 
+    <div class="container ">
 
-    </div>
-    <div id="lobby-screen" class="center hidden">
-        <ul id="players-online">
-        </ul>
-    </div>
-
-    <div id="challenge-popup" class="center hidden">
-        <button type="button" id="acceptButton" class="choose">Aceitar</button>
-        <button type="button" id="refuseButton" class="choose">Recusar</button>
-    </div>
-
-    <div id="result-popup" class="center hidden">
- 
-    </div>
-
-    <div id="game-screen" class="center hidden">
-        <div id="playerTurn" class="center">
+        <div id='get-username'> 
+            
         </div>
-    <div>
+        <div id="lobby-screen" class="center hidden">
+            <span class="list-group-item active">Players Online</span>
+            <div id="players-online" class="container">
+                
+            </div>
+        </div>
+        
+        <div id="challenge-popup" class="hidden">
+            <div class="row text-center">
+               
+                <div class="col text-center">
+                    <button class="btn btn-outline-primary" type="button" id="acceptButton" >Aceitar</button>
+                    <button class="btn btn-outline-secondary" type="button" id="refuseButton" >Recusar</button>
+                </div>
+                   
+            </div>
+        </div>
+        
+        <div id="result-popup" class="center hidden">
+            
+        </div>
+        
+        <div id="game-screen" class="center hidden">
+            <div id="playerTurn" class="center">
+        </div>
+        
+    </div>
 </body>
-
+            
 </html>
