@@ -372,22 +372,3 @@ const updateCell = (cellId, boardId) => {
         }
     }, 200);
 };
-
-const periodic = () => {
-    let actualTime = Date.now();
-
-    let x = 0;
-
-    while (x < socketsConnected.lenght) {
-        if (
-            socketsConnected[x].validate == false &&
-            actualTime - socketsConnected[x].timestamp > TIMEOUT
-        ) {
-            console.log("User removido dos ativos");
-
-            let MSG = { tipo: "ERRO", valor: "timeout" };
-            socketsConnected[x].close();
-            socketsConnected.splice(x, 1);
-        } else x++;
-    }
-};
