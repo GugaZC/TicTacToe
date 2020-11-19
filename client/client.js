@@ -133,8 +133,6 @@ const informOldWoman = (player1Id, player2Id, isPlayer1, boardId) => {
     const goBack = document.getElementById("goBack");
     const resetGame = document.getElementById("resetGame");
 
-    //novo
-
     const board = document.getElementById(`${boardId}`);
     goBack.addEventListener("click", (event) => {
         popup.className = `${popup.className} hidden`;
@@ -153,25 +151,6 @@ const informOldWoman = (player1Id, player2Id, isPlayer1, boardId) => {
     startMessage.innerHTML = "";
 
     board.parentNode.removeChild(board);
-
-    //velho
-    // goBack.addEventListener("click", (event) => {
-    //     popup.className = `${popup.className} hidden`;
-
-    //     document.getElementById("lobby-screen").classList.remove("hidden");
-
-    //     const board = document.getElementById(`${boardId}`);
-    //     board.className = `${board.className} hidden`;
-    // });
-    // resetGame.addEventListener("click", (event) => {
-    //     if (isPlayer1) {
-    //         challenge(player2Id);
-    //     } else {
-    //         challenge(player1Id);
-    //     }
-    //     popup.className = `${popup.className} hidden`;
-    // });
-    // board.parentNode.removeChild(board);
 };
 
 const updateUsers = (data) => {
