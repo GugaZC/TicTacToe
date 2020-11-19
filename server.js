@@ -6,14 +6,12 @@ const wss = new WebSocket.Server({ port: 8080 }, function () {
 
 let socketsConnected = [];
 let games = [];
-const TIMEOUT = 10000;
 
 wss.on("connection", (ws) => {
     const Player = {
         id: `${Math.round(Math.random() * 10000)}`,
         name: `Player${socketsConnected.length + 1}`,
         status: "notLogged",
-        // connectedAt: Date.now()
     };
 
     ws.Player = Player;
