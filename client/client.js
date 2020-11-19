@@ -35,7 +35,9 @@ const connectToServer = (url) => {
 
             case "challengeRefused":
                 alert("Seu desafio foi recusado");
-                document.getElementById("lobby-screen").classList.remove("hi");
+                document
+                    .getElementById("lobby-screen")
+                    .classList.remove("hidden");
                 break;
             case "updateGame":
                 updateGame(
@@ -87,14 +89,8 @@ const setUserName = (playerId) => {
 
     getUsername.innerHTML = content;
     button = document.getElementById("nameButton");
-    // username = input.value;
+
     input = document.getElementById("nameInput");
-    // getUsername.innerHTML = username;
-
-    // input.type = "text";
-    // getUsername.innerHTML = button;
-
-    // button.innerHTML = "Salvar";
 
     button.addEventListener("click", (event) => {
         username = input.value;
@@ -129,21 +125,21 @@ const informOldWoman = (player1Id, player2Id, isPlayer1, boardId) => {
     alert("GaveOldWoman (pt_br: deu velha)");
     const popup = document.getElementById("result-popup");
 
-    popup.innerHTML = ` <button type="button" id="goBack" class="choose">Voltar ao lobby</button>
-    <button type="button" id="resetGame" class="choose">Jogar novamente</button>`;
+    popup.innerHTML = `<div class="row text-center"> 
+                <div class="col text-center"> <button class="btn btn-outline-secondary" type="button" id="goBack" >Voltar ao lobby</button>
+    <button class="btn btn-outline-primary" type="button"id="resetGame" >Jogar novamente</button></div> <div/>`;
     popup.className = "center";
 
     const goBack = document.getElementById("goBack");
     const resetGame = document.getElementById("resetGame");
 
+    //novo
+
+    const board = document.getElementById(`${boardId}`);
     goBack.addEventListener("click", (event) => {
         popup.className = `${popup.className} hidden`;
 
         document.getElementById("lobby-screen").classList.remove("hidden");
-
-        const board = document.getElementById(`${boardId}`);
-        board.className = `${board.className} hidden`;
-        console.log("oi");
     });
     resetGame.addEventListener("click", (event) => {
         if (isPlayer1) {
@@ -153,7 +149,29 @@ const informOldWoman = (player1Id, player2Id, isPlayer1, boardId) => {
         }
         popup.className = `${popup.className} hidden`;
     });
+    const startMessage = document.getElementById("playerTurn");
+    startMessage.innerHTML = "";
+
     board.parentNode.removeChild(board);
+
+    //velho
+    // goBack.addEventListener("click", (event) => {
+    //     popup.className = `${popup.className} hidden`;
+
+    //     document.getElementById("lobby-screen").classList.remove("hidden");
+
+    //     const board = document.getElementById(`${boardId}`);
+    //     board.className = `${board.className} hidden`;
+    // });
+    // resetGame.addEventListener("click", (event) => {
+    //     if (isPlayer1) {
+    //         challenge(player2Id);
+    //     } else {
+    //         challenge(player1Id);
+    //     }
+    //     popup.className = `${popup.className} hidden`;
+    // });
+    // board.parentNode.removeChild(board);
 };
 
 const updateUsers = (data) => {
@@ -192,8 +210,9 @@ const informWinner = (player1Id, player2Id, isPlayer1, boardId, playerName) => {
     alert(`O jogador ${playerName} venceu a partida`);
     const popup = document.getElementById("result-popup");
 
-    popup.innerHTML = ` <button type="button" id="goBack" class="choose">Voltar ao lobby</button>
-    <button type="button" id="resetGame" class="choose">Jogar novamente</button>`;
+    popup.innerHTML = `<div class="row text-center"> 
+                <div class="col text-center"> <button class="btn btn-outline-secondary" type="button" id="goBack" >Voltar ao lobby</button>
+    <button class="btn btn-outline-primary" type="button"id="resetGame" >Jogar novamente</button></div> <div/>`;
     popup.className = "center";
 
     const goBack = document.getElementById("goBack");
@@ -204,7 +223,6 @@ const informWinner = (player1Id, player2Id, isPlayer1, boardId, playerName) => {
         popup.className = `${popup.className} hidden`;
 
         document.getElementById("lobby-screen").classList.remove("hidden");
-        console.log("oi");
     });
     resetGame.addEventListener("click", (event) => {
         if (isPlayer1) {
@@ -247,7 +265,7 @@ const updateGame = (cellId, player1Turn, isYourTurn) => {
 
     const startMessage = document.getElementById("playerTurn");
     if (isYourTurn) {
-        startMessage.innerHTML = "É a sua vez";
+        startMessage.innerHTML = "É a sua vez 👍🏿👍🏿👍🏿";
         enableCells();
     } else {
         startMessage.innerHTML = "Aguardando o outro jogador ✋🏻✋🏻✋🏻";
@@ -270,7 +288,8 @@ const updateGame = (cellId, player1Turn, isYourTurn) => {
 const handleChallenge = (player1, player2) => {
     const buttons = document.getElementById("challenge-popup");
 
-    document.getElementById("#exampleModalCenter").modal("show");
+    const Modal = $("#modalChallenge");
+    Modal.modal("show");
 
     buttons.className = "center";
     const acceptButton = document.getElementById("acceptButton");
@@ -285,6 +304,8 @@ const handleChallenge = (player1, player2) => {
             };
             buttons.className = "center hidden";
             document.getElementById("challenge-popup").classList.add("hidden");
+            document.getElementById("result-popup").classList.add("hidden");
+
             socket.send(JSON.stringify(data));
         });
 
@@ -295,7 +316,6 @@ const handleChallenge = (player1, player2) => {
             };
             buttons.className = "center hidden";
             socket.send(JSON.stringify(data));
-            refuseButton.removeEventListener("click", () => {});
         });
     }
     counter++;
@@ -368,7 +388,7 @@ const enterGame = (id, disable) => {
         disableCells();
         startMessage.innerHTML = "Aguardando o outro jogador ✋🏻✋🏻✋🏻";
     } else {
-        startMessage.innerHTML = "É a sua vez";
+        startMessage.innerHTML = "É a sua vez 👍🏿👍🏿👍🏿";
     }
 
     const cells = document.getElementsByClassName("cell");
