@@ -19,15 +19,6 @@ wss.on("connection", (ws) => {
     ws.send(JSON.stringify({ action: "getName", playerId: Player.id }));
 
     ws.on("message", (data) => {
-        // data = {
-        //     action: string,  ação que deve ser feita
-        //     cellId?: string  id da celula que foi clicada
-        //     symbol?: string  símbolo que deve ser inserido
-        //     player1Id?:
-        //     player2Id?:
-        //     challengedPlayerId?: se for mensagem pra desafio terá o id do player que é desafiado
-        // }
-
         const {
             action,
             challengedPlayerId,
