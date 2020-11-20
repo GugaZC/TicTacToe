@@ -78,6 +78,7 @@ wss.on("connection", (ws) => {
     ws.on("close", (element) => {
         const index = socketsConnected.indexOf(ws);
         socketsConnected.splice(index, 1);
+        sendUsersConnected();
     });
 });
 
