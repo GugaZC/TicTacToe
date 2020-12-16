@@ -21,7 +21,7 @@ Para o funcionamento pleno do projeto, é necessário:
   Para a execução do projeto, é necessário:
 
 <ul>
-<li> Iniciliazar o servidor com nodemon (alterar a porta se for do desejo):
+  <li> Iniciliazar o servidor com nodemon (alterar a porta se for do desejo). </li>
  </ul>
   
   
