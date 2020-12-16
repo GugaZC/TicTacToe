@@ -14,14 +14,14 @@ Para o funcionamento pleno do projeto, é necessário:
 <li> Instalar o Node.js e suas dependências: <ul>
   <li> <b>nodemon</b></li>
   <li> <b>ws</b></li>
- </ul> </li>
+ </ul> </li> </ul>
   
   ## Execução do projeto
   
   Para a execução do projeto, é necessário:
 
 <ul>
-  <li> Iniciliazar o servidor com nodemon (alterar a porta se for do desejo). </li>
+  <li> <b> Iniciliazar o servidor com nodemon (alterar a porta se for do desejo). </b> </li>
  </ul>
   
   
