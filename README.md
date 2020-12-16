@@ -22,8 +22,6 @@ Para o funcionamento pleno do projeto, é necessário:
 
 <ul>
 <li> Iniciliazar o servidor com nodemon (alterar a porta se for do desejo):
-  <li> <b>nodemon</b></li>
-  <li> <b>ws</b></li>
  </ul>
   
   
